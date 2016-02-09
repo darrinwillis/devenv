@@ -13,7 +13,8 @@ Plugin 'gmarik/Vundle.vim'
 " Making vim look good
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " Adding programmer text editing
 Plugin 'scrooloose/nerdtree'
@@ -89,6 +90,9 @@ set laststatus=2
 " download all the .ttf files, double-click on them and click "Install"
 " Finally, uncomment the next line
 let g:airline_powerline_fonts = 1
+
+" Color
+let g:airline_theme='solarized'
 
 " Show PASTE if in paste mode
 let g:airline_detect_paste=1
