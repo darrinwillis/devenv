@@ -32,7 +32,7 @@ echo "Backing up ~/.vimrc to ~/.vimrc.bak"
 mv ~/.vimrc ~/.vimrc.bak
 
 echo "Installing new .vimrc"
-mv $DIR/.vimrc ~/.vimrc
+cp $DIR/.vimrc ~/.vimrc
 
 echo "Installing plugins"
 vim +PluginInstall +qall
