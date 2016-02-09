@@ -59,9 +59,15 @@ cp $VIMRC ~/.vimrc
 echo "Installing plugins"
 vim +PluginInstall +qall
 
+grep -vq "set colored-stats on" ~/.inputrc
+ret=$?
+if [ $ret != "0" ]; then
+    echo "Fixing tab complete dircolors"
+    echo "set colored-stats on" >> ~/.inputrc
+fi
+
 # Setup terminal profile
-# echo "Applying profile settings"
-# gconftool-2 --load $GNOMECONF
+echo "IMPORTANT: CHANGE THE FONT TO MENLO FOR POWERLINE"
 
 cd $ORIG_DIR
 echo "Done"
