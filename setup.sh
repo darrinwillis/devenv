@@ -27,7 +27,7 @@ sudo apt-get install vim
 
 echo "Installing fonts"
 mkdir -p ~/.fonts
-cp -rf "$FONTS/*" ~/.fonts
+cp $FONTS/* ~/.fonts
 
 echo "Installing Solarized"
 cd $TERM_COLORS
