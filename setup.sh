@@ -53,8 +53,10 @@ fi
 echo "Installing Vundle"
 git clone https://github.com/gmarik/Vundle.vim ~/.vim/bundle/Vundle.vim
 
-echo "Backing up ~/.vimrc to ~/.vimrc.bak"
-mv ~/.vimrc ~/.vimrc.bak
+if [ -e "~/.vimrc" ]; then
+    echo "Backing up ~/.vimrc to ~/.vimrc.bak"
+    mv ~/.vimrc ~/.vimrc.bak
+fi
 
 echo "Installing new .vimrc"
 cp $VIMRC ~/.vimrc
