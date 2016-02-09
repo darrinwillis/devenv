@@ -7,7 +7,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Exit on error
-set +e
+set -e
 
 DIR=`dirname ${BASH_SOURCE[0]}`
 
@@ -20,6 +20,13 @@ echo "Setting up development environment"
 # Setup vim
 echo "Installing vim"
 sudo apt-get install vim
+
+echo "Backing up ~/.vim to ~/.vim.bak"
+mv ~/.vim ~/.vim.bak
+mkdir -p ~/.vim/bundle
+
+echo "Installing Vundle"
+git clone https://github.com/gmarik/Vundle.vim ~/.vim/bundle/Vundle.vim
 
 echo "Backing up ~/.vimrc to ~/.vimrc.bak"
 mv ~/.vimrc ~/.vimrc.bak
