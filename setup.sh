@@ -47,8 +47,9 @@ eval `dircolors ~/.dircolors`
 if [ -e "~/.vim" ]; then
     echo "Backing up ~/.vim to ~/.vim.bak"
     mv ~/.vim ~/.vim.bak
-    mkdir -p ~/.vim/bundle
 fi
+
+mkdir -p ~/.vim/bundle
 
 echo "Installing Vundle"
 git clone https://github.com/gmarik/Vundle.vim ~/.vim/bundle/Vundle.vim
