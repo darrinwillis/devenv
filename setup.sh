@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Root check
-if [ "$EUID" -ne 0 ]; then
-    echo "Please run as root"
-    exit
-fi
-
 # Exit on error
 set -e
 
