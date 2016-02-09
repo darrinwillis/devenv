@@ -30,8 +30,15 @@ mkdir -p ~/.fonts
 cp $FONTS/* ~/.fonts
 
 echo "Installing Solarized"
+cd $DIR
+git submodule init
+git submodule update
+
 cd $TERM_COLORS
 ./set_dark.sh
+
+# Move back to the original directory
+cd $ORIG_DIR
 
 echo "Installing dircolors fix"
 cp $DIRCOLORS ~/.dircolors
