@@ -19,6 +19,9 @@ echo "Setting up development environment"
 echo "Installing vim"
 sudo apt-get install vim
 
+echo "Installing git"
+sudo apt-get install git
+
 echo "Installing fonts"
 mkdir -p ~/.fonts
 cp $FONTS/* ~/.fonts
@@ -66,8 +69,14 @@ if [ $ret != "0" ]; then
     echo "set colored-stats on" >> ~/.inputrc
 fi
 
+echo "Installing vimdiff as git difftool"
+git config --global diff.tool vimdiff
+git config --global merge.tool vimdiff
+
 # Setup terminal profile
 echo "IMPORTANT: CHANGE THE FONT TO MENLO FOR POWERLINE"
+read
+
 
 cd $ORIG_DIR
 echo "Done"
