@@ -114,10 +114,8 @@ augroup mySyntastic
   au FileType tex let b:syntastic_mode = "passive"
 augroup END
 
-let g:syntastic_c_include_dirs = [ '../CMU462/include/CMU462', '../include', 'include' ]
+let g:syntastic_c_include_dirs = [ '../include', 'include' ]
 let g:syntastic_c_config_file = '.syntastic_c_config'
-let g:syntastic_cpp_include_dirs = [ '../include', 'include', '../CMU462/include/CMU462' ]
-let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
 let g:syntastic_c_remove_include_errors = 1
 
 
@@ -161,3 +159,9 @@ set clipboard=unnamedplus
 
 " Map \q to close the current buffer
 nmap <silent> <leader>q :bp\|bd #<CR>
+
+" @r to replace all trailing whitespace
+let @r=':%s/\s\+$//'
+
+" Add cscope database
+cs add /home/dwillis/xcalar/cscope.out
