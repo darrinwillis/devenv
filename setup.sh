@@ -15,12 +15,35 @@ ORIG_DIR=`pwd`
 
 echo "Setting up development environment"
 
-# Setup vim
-echo "Installing vim"
-sudo apt-get install vim
-
 echo "Installing git"
 sudo apt-get install git
+
+# Setup vim
+echo "Installing vim prereqs"
+sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev \
+    libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
+    libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
+    python3-dev ruby-dev lua5.1 lua5.1-dev libperl-dev git
+
+echo "Checking out vim"
+git checkout https://github.com/vim/vim.git
+(cd vim &&
+    git checkout "v8.0.0206" &&
+	./configure --with-features=huge \
+	            --enable-multibyte \
+	            --enable-rubyinterp=yes \
+	            --enable-pythoninterp=yes \
+	            --with-python-config-dir=/usr/lib/python2.7/config \
+	            --enable-python3interp=yes \
+	            --with-python3-config-dir=/usr/lib/python3.5/config \
+	            --enable-perlinterp=yes \
+	            --enable-luainterp=yes \
+	            --enable-gui=gtk2 \
+			    --with-x \
+			    --enable-cscope \
+                --prefix=/usr &&
+	make -j8 &&
+    sudo make install)
 
 echo "Installing fonts"
 mkdir -p ~/.fonts
