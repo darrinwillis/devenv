@@ -17,13 +17,19 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 " Adding programmer text editing
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'scrooloose/syntastic'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
 Plugin 'majutsushi/tagbar'
-Plugin 'kien/ctrlp.vim'
+
+" fuzzy finding
+Plugin 'junegunn/fzf'
+
+" Auto completion
+Plugin 'Valloric/YouCompleteMe'
+
+" YCM helper
+Plugin 'rdnetto/YCM-Generator'
 
 " Git plugins
 Plugin 'airblade/vim-gitgutter'
@@ -32,14 +38,17 @@ Plugin 'tpope/vim-fugitive'
 " Other text editing
 Plugin 'Raimondi/delimitMate'
 
-" Systemverilog
-Plugin 'nachumk/systemverilog.vim'
-
 " SLICC Cache Coherence language
 Plugin 'kshenoy/vim-slicc'
 
 " C scope
 Plugin 'steffanc/cscopemaps.vim'
+
+" Vim rtags for finding C++ symbols
+Plugin 'lyuts/vim-rtags'
+
+" Automatic formatting
+Plugin 'Chiel92/vim-autoformat'
 
 call vundle#end()
 
@@ -100,11 +109,8 @@ let g:airline_detect_paste=1
 " Show airline for tabs too
 let g:airline#extensions#tabline#enabled = 1
 
-" ----- jistr/vim-nerdtree-tabs -----
-" Open/close NERDTree Tabs with \t
-nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-" To have NERDTree always open on startup set to 1 to open on start
-let g:nerdtree_tabs_open_on_console_startup = 0
+let g:airline_section_x = ''
+let g:airline_section_y = ''
 
 " ----- scrooloose/syntastic settings -----
 let g:syntastic_error_symbol = '✘'
@@ -114,10 +120,13 @@ augroup mySyntastic
   au FileType tex let b:syntastic_mode = "passive"
 augroup END
 
-let g:syntastic_c_include_dirs = [ '../include', 'include' ]
-let g:syntastic_c_config_file = '.syntastic_c_config'
-let g:syntastic_c_remove_include_errors = 1
+let g:syntastic_cpp_include_dirs = [ '../include', 'include' , '/home/dwillis/xcalar/src/include']
+let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
+let g:syntastic_cpp_remove_include_errors = 1
+let g:syntastic_cpp_compiler_options = "-std=gnu++11"
 
+" FZF settings
+nmap <c-p> :FZF<CR>
 
 " ----- xolox/vim-easytags settings -----
 " Where to look for tags files
@@ -132,6 +141,7 @@ let g:easytags_suppress_ctags_warning = 1
 " ----- majutsushi/tagbar settings -----
 " Open/close tagbar with \b
 nmap <silent> <leader>b :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
 " Uncomment to open tagbar automatically whenever possible
 "autocmd BufEnter * nested :call tagbar#autoopen(0)
 
@@ -153,7 +163,25 @@ augroup mydelimitMate
   au FileType python let b:delimitMate_nesting_quotes = ['"', "'"]
 augroup END
 
-" ----- End Plugin Settings ----
+" ----- YouCompleteMe -----
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_register_as_syntastic_checker = 1
+"let g:ycm_key_list_select_completion = ['<TAB>']
+let g:ycm_autoclose_preview_window_after_completion = 1
+"set tags=/home/dwillis/xcalar/tags
+let g:ycm_show_diagnostics_ui = 1
+let g:ycm_min_num_identifier_candidate_chars = 99
+
+" ----- vim-rtags settings -----
+let g:rtagsRcCmd = "/home/dwillis/dev/3rd/rtags/build2/bin/rc"
+"let g:rtagsUseLocationList = 0
+
+" ----- Autoformat settings -----
+let g:formatterpath = ['/usr/bin']
+"au BufWrite *.cpp :Autoformat
+"au BufWrite *.h :Autoformat
+
+" ----- End Plugin Settings -----
 
 set clipboard=unnamedplus
 
@@ -165,3 +193,32 @@ let @r=':%s/\s\+$//'
 
 " Add cscope database
 cs add /home/dwillis/xcalar/cscope.out
+
+
+" Make .sh always be highlighted as bash
+let g:is_bash=1
+
+" Hightlight column 80
+set cc=80
+
+" Allow bash aliases inside vim shell
+"set shell=/bin/bash\ -i
+
+" \r to reset cscope db
+"nmap <silent> <leader>r :!bash -ic cs<CR>:cs reset<CR>
+" \a to add cscope db
+"nmap <silent> <leader>a :cs add ~/xcalar/cscope.out<CR>
+
+" \g to reset syntax highlighting
+nmap <silent> <leader>f :syntax sync fromstart<CR>
+
+" \l to close location list
+nmap <silent> <leader>l :lclose<CR>
+
+" \c to show ycm diags
+nmap <silent> <leader>c :YcmDiags<CR>
+
+" \s to save
+nmap <silent> <leader>s :w<CR>
+
+inoremap jk <ESC>
