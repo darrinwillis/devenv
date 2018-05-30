@@ -22,6 +22,9 @@ Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
 Plugin 'majutsushi/tagbar'
 
+" linting
+"Plugin 'w0rp/ale'
+
 " fuzzy finding
 Plugin 'junegunn/fzf'
 
@@ -69,9 +72,10 @@ set shiftwidth=4
 set expandtab
 nnoremap <silent> <leader>\ :nohlsearch<CR>
 
+" Set preferences
 syntax on
-
 set mouse=a
+set scrolloff=5 " When searching, display 5 lines of context
 
 " ----- Plugin-Specific Settings --------------------------------------
 set guifont=Menlo\ for\ Powerline
@@ -111,6 +115,15 @@ let g:airline#extensions#tabline#enabled = 1
 
 let g:airline_section_x = ''
 let g:airline_section_y = ''
+
+" ----- 'w0rp/ale' settings -----
+"let g:ale_sign_error = '✘'
+"let g:ale_sign_warning = "▲"
+"let g:ale_sign_column_always = 1
+"let g:ale_linters = {
+"\   'python': ['pycodestyle'],
+"\}
+
 
 " ----- scrooloose/syntastic settings -----
 let g:syntastic_error_symbol = '✘'
@@ -173,7 +186,7 @@ let g:ycm_show_diagnostics_ui = 1
 let g:ycm_min_num_identifier_candidate_chars = 99
 
 " ----- vim-rtags settings -----
-let g:rtagsRcCmd = "/home/dwillis/dev/3rd/rtags/build2/bin/rc"
+let g:rtagsRcCmd = "/home/dwillis/dev/3rd/rtags/build/bin/rc"
 "let g:rtagsUseLocationList = 0
 
 " ----- Autoformat settings -----
@@ -213,7 +226,7 @@ set cc=80
 nmap <silent> <leader>f :syntax sync fromstart<CR>
 
 " \l to close location list
-nmap <silent> <leader>l :lclose<CR>
+nmap <silent> <leader>l :lclose<CR>:cclose<CR>
 
 " \c to show ycm diags
 nmap <silent> <leader>c :YcmDiags<CR>
