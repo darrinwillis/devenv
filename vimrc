@@ -22,6 +22,9 @@ Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
 Plugin 'majutsushi/tagbar'
 
+" Typescript
+Plugin 'https://github.com/leafgarland/typescript-vim.git'
+
 " linting
 "Plugin 'w0rp/ale'
 
@@ -52,6 +55,9 @@ Plugin 'lyuts/vim-rtags'
 
 " Automatic formatting
 Plugin 'Chiel92/vim-autoformat'
+
+" clang-format
+Plugin 'rhysd/vim-clang-format'
 
 call vundle#end()
 
@@ -194,6 +200,11 @@ let g:formatterpath = ['/usr/bin']
 "au BufWrite *.cpp :Autoformat
 "au BufWrite *.h :Autoformat
 
+" ----- clang-format settings -----
+autocmd FileType c ClangFormatAutoEnable
+autocmd FileType cpp ClangFormatAutoEnable
+
+
 " ----- End Plugin Settings -----
 
 set clipboard=unnamedplus
@@ -222,7 +233,7 @@ set cc=80
 " \a to add cscope db
 "nmap <silent> <leader>a :cs add ~/xcalar/cscope.out<CR>
 
-" \g to reset syntax highlighting
+" \f to reset syntax highlighting
 nmap <silent> <leader>f :syntax sync fromstart<CR>
 
 " \l to close location list
@@ -231,7 +242,13 @@ nmap <silent> <leader>l :lclose<CR>:cclose<CR>
 " \c to show ycm diags
 nmap <silent> <leader>c :YcmDiags<CR>
 
-" \s to save
-nmap <silent> <leader>s :w<CR>
+" \s to replace (%s) current word
+nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+" \y to run profiling
+nmap <silent> <leader>y :profile start profile.log<CR>:profile func *<CR>:profile file *<CR>
+
+" \Y to stop profiling
+nmap <silent> <leader>Y :profile pause<CR>
 
 inoremap jk <ESC>
