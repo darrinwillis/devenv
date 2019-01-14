@@ -3,63 +3,68 @@ set nocompatible
 
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Helper to build YCM
+function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if a:info.status == 'installed' || a:info.force
+    !./install.py
+  endif
+endfunction
 
-" To install run
-" vim +PluginInstall +qall
-Plugin 'gmarik/Vundle.vim'
+" vim-plug
+" vim +PlugInstall or vim +PlugUpdate
+call plug#begin('~/.vim/plugged')
 
 " Making vim look good
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'tomasr/molokai'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
+"Plug 'tomasr/molokai'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Adding programmer text editing
-Plugin 'scrooloose/syntastic'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-easytags'
-Plugin 'majutsushi/tagbar'
+"Plug 'scrooloose/syntastic'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-easytags'
+Plug 'majutsushi/tagbar'
+
+" PEP8 python indentation
+Plug 'Vimjas/vim-python-pep8-indent'
 
 " Typescript
-Plugin 'https://github.com/leafgarland/typescript-vim.git'
+Plug 'https://github.com/leafgarland/typescript-vim.git'
 
 " linting
-"Plugin 'w0rp/ale'
+Plug 'w0rp/ale'
 
 " fuzzy finding
-Plugin 'junegunn/fzf'
+Plug 'junegunn/fzf'
 
 " Auto completion
-Plugin 'Valloric/YouCompleteMe'
-
-" YCM helper
-Plugin 'rdnetto/YCM-Generator'
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
 " Git plugins
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 " Other text editing
-Plugin 'Raimondi/delimitMate'
-
-" SLICC Cache Coherence language
-Plugin 'kshenoy/vim-slicc'
+Plug 'Raimondi/delimitMate'
 
 " C scope
-Plugin 'steffanc/cscopemaps.vim'
+Plug 'steffanc/cscopemaps.vim'
 
 " Vim rtags for finding C++ symbols
-Plugin 'lyuts/vim-rtags'
+Plug 'lyuts/vim-rtags'
 
 " Automatic formatting
-Plugin 'Chiel92/vim-autoformat'
+"Plug 'Chiel92/vim-autoformat'
 
 " clang-format
-Plugin 'rhysd/vim-clang-format'
+"Plug 'rhysd/vim-clang-format'
 
-call vundle#end()
+call plug#end()
 
 filetype plugin indent on
 
@@ -123,12 +128,18 @@ let g:airline_section_x = ''
 let g:airline_section_y = ''
 
 " ----- 'w0rp/ale' settings -----
-"let g:ale_sign_error = '✘'
-"let g:ale_sign_warning = "▲"
-"let g:ale_sign_column_always = 1
-"let g:ale_linters = {
-"\   'python': ['pycodestyle'],
-"\}
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = "▲"
+let g:ale_sign_column_always = 1
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
+
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+\   'cpp': ['clang-format'],
+\   'python': ['yapf'],
+\}
 
 
 " ----- scrooloose/syntastic settings -----
@@ -201,8 +212,8 @@ let g:formatterpath = ['/usr/bin']
 "au BufWrite *.h :Autoformat
 
 " ----- clang-format settings -----
-autocmd FileType c ClangFormatAutoEnable
-autocmd FileType cpp ClangFormatAutoEnable
+" autocmd FileType c ClangFormatAutoEnable
+" autocmd FileType cpp ClangFormatAutoEnable
 
 
 " ----- End Plugin Settings -----
@@ -214,6 +225,9 @@ nmap <silent> <leader>q :bp\|bd #<CR>
 
 " @r to replace all trailing whitespace
 let @r=':%s/\s\+$//'
+
+" Replace camelCase with snake_case
+" %s#\v(<\u\l+|\l+)(\u)#\l\1_\l\2#gc
 
 " Add cscope database
 cs add /home/dwillis/xcalar/cscope.out
