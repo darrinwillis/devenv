@@ -58,12 +58,6 @@ Plug 'steffanc/cscopemaps.vim'
 " Vim rtags for finding C++ symbols
 Plug 'lyuts/vim-rtags'
 
-" Automatic formatting
-"Plug 'Chiel92/vim-autoformat'
-
-" clang-format
-"Plug 'rhysd/vim-clang-format'
-
 call plug#end()
 
 filetype plugin indent on
@@ -132,6 +126,7 @@ let g:ale_sign_error = '✘'
 let g:ale_sign_warning = "▲"
 let g:ale_sign_column_always = 1
 let g:ale_linters = {
+\   'cpp': [],
 \   'python': ['flake8'],
 \}
 
