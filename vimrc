@@ -25,7 +25,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Adding programmer text editing
-"Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'majutsushi/tagbar'
@@ -56,7 +56,20 @@ Plug 'Raimondi/delimitMate'
 Plug 'steffanc/cscopemaps.vim'
 
 " Vim rtags for finding C++ symbols
-Plug 'lyuts/vim-rtags'
+"6/11/19 disabled because 'vim is missing python support'
+"Plug 'lyuts/vim-rtags'
+
+" NERDTree
+" file browsing
+Plug 'scrooloose/nerdtree'
+
+" editorconfig
+" Automatically change coding style based off of editorconfig files
+Plug 'editorconfig/editorconfig-vim'
+
+" cpp-modern
+" modern and more heavy handed c++ syntax highlighting
+Plug 'bfrg/vim-cpp-modern'
 
 call plug#end()
 
@@ -102,6 +115,9 @@ colorscheme solarized
 " Always show statusbar
 set laststatus=2
 
+" hide '-- INSERT --'
+set noshowmode
+
 " Fancy arrow symbols, requires a patched font
 " To install a patched font, run over to
 "     https://github.com/abertsch/Menlo-for-Powerline
@@ -145,7 +161,6 @@ augroup mySyntastic
   au FileType tex let b:syntastic_mode = "passive"
 augroup END
 
-let g:syntastic_cpp_include_dirs = [ '../include', 'include' , '/home/dwillis/xcalar/src/include']
 let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
 let g:syntastic_cpp_remove_include_errors = 1
 let g:syntastic_cpp_compiler_options = "-std=gnu++11"
@@ -193,7 +208,7 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_register_as_syntastic_checker = 1
 "let g:ycm_key_list_select_completion = ['<TAB>']
 let g:ycm_autoclose_preview_window_after_completion = 1
-"set tags=/home/dwillis/xcalar/tags
+"set tags=/home/dwillis/tags
 let g:ycm_show_diagnostics_ui = 1
 let g:ycm_min_num_identifier_candidate_chars = 99
 
@@ -224,10 +239,6 @@ let @r=':%s/\s\+$//'
 " Replace camelCase with snake_case
 " %s#\v(<\u\l+|\l+)(\u)#\l\1_\l\2#gc
 
-" Add cscope database
-cs add /home/dwillis/xcalar/cscope.out
-
-
 " Make .sh always be highlighted as bash
 let g:is_bash=1
 
@@ -237,11 +248,6 @@ set cc=80
 " Allow bash aliases inside vim shell
 "set shell=/bin/bash\ -i
 
-" \r to reset cscope db
-"nmap <silent> <leader>r :!bash -ic cs<CR>:cs reset<CR>
-" \a to add cscope db
-"nmap <silent> <leader>a :cs add ~/xcalar/cscope.out<CR>
-
 " \f to reset syntax highlighting
 nmap <silent> <leader>f :syntax sync fromstart<CR>
 
@@ -250,6 +256,24 @@ nmap <silent> <leader>l :lclose<CR>:cclose<CR>
 
 " \c to show ycm diags
 nmap <silent> <leader>c :YcmDiags<CR>
+
+" \t to show type
+nmap <silent> <leader>t :YcmCompleter GetType<CR>
+
+" \e to show definition
+nmap <silent> <leader>e :YcmCompleter GoToDefinition<CR>
+
+" \a to show declaration
+nmap <silent> <leader>a :YcmCompleter GoToDeclaration<CR>
+
+" \g to just go, imprecisely. this may be inaccurate
+nmap <silent> <leader>g :YcmCompleter GoToImprecise<CR>
+
+" \d to open current directory in file browser
+nmap <silent> <leader>d :NERDTreeFind<CR>
+
+" \p to close file browser
+nmap <silent> <leader>p :NERDTreeToggle<CR>
 
 " \s to replace (%s) current word
 nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
