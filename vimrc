@@ -54,6 +54,7 @@ Plug 'Raimondi/delimitMate'
 
 " C scope
 Plug 'steffanc/cscopemaps.vim'
+Plug 'cespare/vim-toml'
 
 " Vim rtags for finding C++ symbols
 "6/11/19 disabled because 'vim is missing python support'
@@ -70,6 +71,12 @@ Plug 'editorconfig/editorconfig-vim'
 " cpp-modern
 " modern and more heavy handed c++ syntax highlighting
 Plug 'bfrg/vim-cpp-modern'
+
+" rust formatting
+Plug 'rust-lang/rust.vim'
+
+" Copilot
+Plug 'github/copilot.vim'
 
 call plug#end()
 
@@ -149,8 +156,12 @@ let g:ale_linters = {
 let g:ale_fix_on_save = 1
 let g:ale_fixers = {
 \   'cpp': ['clang-format'],
-\   'python': ['yapf'],
+\   'python': ['black'],
+\   'rust': ['rustfmt']
 \}
+
+" Rust should use cargo to check clippy with this, if clippy is installed
+let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
 
 
 " ----- scrooloose/syntastic settings -----
@@ -284,4 +295,6 @@ nmap <silent> <leader>y :profile start profile.log<CR>:profile func *<CR>:profil
 " \Y to stop profiling
 nmap <silent> <leader>Y :profile pause<CR>
 
+" Run shell script 'src/wsl-launch.sh' in the background
+nnoremap <silent> <leader>r :!wsl-launch.sh<CR>
 inoremap jk <ESC>

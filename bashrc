@@ -37,13 +37,13 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+    xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-force_color_prompt=yes
+#force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -56,60 +56,8 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-
-# get current branch in git repo
-function parse_git_branch()
-{
-    BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
-    if [ ! "${BRANCH}" == "" ]
-    then
-        STAT=$(parse_git_dirty)
-        echo "[${BRANCH}${STAT}]"
-    else
-        echo ""
-    fi
-}
-
-# get current status of git repo
-function parse_git_dirty
-{
-    status=$(git status 2>&1 | tee)
-    dirty=$(echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")
-    untracked=$(echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?")
-    ahead=$(echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?")
-    newfile=$(echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?")
-    renamed=$(echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?")
-    deleted=$(echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?")
-    bits=''
-    if [ "${renamed}" == "0" ]; then
-        bits=">${bits}"
-    fi
-    if [ "${ahead}" == "0" ]; then
-        bits="*${bits}"
-    fi
-    if [ "${newfile}" == "0" ]; then
-        bits="+${bits}"
-    fi
-    if [ "${untracked}" == "0" ]; then
-        bits="?${bits}"
-    fi
-    if [ "${deleted}" == "0" ]; then
-        bits="x${bits}"
-    fi
-    if [ "${dirty}" == "0" ]; then
-        bits="!${bits}"
-    fi
-    if [ ! "${bits}" == "" ]; then
-        echo " ${bits}"
-    else
-        echo ""
-    fi
-}
-
 if [ "$color_prompt" = yes ]; then
-    #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-
-    export PS1="\[\e[32m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\]-\[\e[31m\]\`parse_git_branch\`\[\e[m\]:\[\e[36m\]\w\[\e[m\]\\$ "
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -164,18 +112,41 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-export TERMINAL='gnome-terminal'
 
-if [ "$IN_DOCKER" = "1" ]; then
-    PS1="docker> $PS1"
-fi
+# ADDED STUFF
 
-# Add rtags binaries
-export PATH=$PATH:/home/dwillis/dev/3rd/rtags/bin
+# History management
+# Avoid duplicates
+HISTCONTROL=ignoredups:erasedups
+# When the shell exits, append to the history file instead of overwriting it
+shopt -s histappend
 
-# path for ripgrep
-export PATH="$HOME/dev/3rd/ripgrep/target/release:$PATH"
+# After each command, append to the history file and reread it
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
+# golang
+#export GOPATH=$HOME/dev/go
+#export GOROOT=/usr/local/go
+#export PATH=$PATH:$GOROOT/bin
+#export PATH=$PATH:$GOPATH/bin
+
+# Bash stuff
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*"  -g "!*.{o,pyc,swp}" 2>/dev/null'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!{.git,node_modules}/*"  -g "!*.{o,pyc,swp}" 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# neovim
+export PATH="$HOME/neovim/bin:$PATH"
+
+# google-chrome (in windows)
+export PATH="/mnt/c/Program Files (x86)/Google/Chrome/Application:$PATH"
+
+# perf for WSL 2
+export PATH="/home/dwillis/dev/3rd/WSL2-Linux-Kernel/tools/perf:$PATH"
+
+source "$HOME/.cargo/env"
+
+# nodejs & npm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
