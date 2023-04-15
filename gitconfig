@@ -1,0 +1,19 @@
+[user]
+	email = willisdarrin@gmail.com
+	name = Darrin Willis
+
+[core]
+  editor = nvim
+  autocrlf = input
+
+[alias]
+  co = checkout
+  br = branch
+  ci = commit
+  st = status
+  last = log -1 HEAD
+  unstage = reset HEAD --
+  lg = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+  df = diff
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  undo = reset HEAD~1

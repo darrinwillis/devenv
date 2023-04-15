@@ -222,6 +222,8 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 "set tags=/home/dwillis/tags
 let g:ycm_show_diagnostics_ui = 1
 let g:ycm_min_num_identifier_candidate_chars = 99
+" Set rust root so YCM uses the latest run compiler
+let g:ycm_rust_toolchain_root = '/home/dwillis/.rustup/toolchains/stable-x86_64-unknown-linux-gnu'
 
 " ----- vim-rtags settings -----
 let g:rtagsRcCmd = "/home/dwillis/dev/3rd/rtags/build/bin/rc"
@@ -239,7 +241,22 @@ let g:formatterpath = ['/usr/bin']
 
 " ----- End Plugin Settings -----
 
-set clipboard=unnamedplus
+" Apply clipboard for WSL passthrough
+let g:clipboard = {
+  \   'name': 'WslClipboard',
+  \   'copy': {
+  \      '+': 'clip.exe',
+  \      '*': 'clip.exe',
+  \    },
+  \   'paste': {
+  \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+  \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+  \   },
+  \   'cache_enabled': 0,
+  \ }
+
+
+" set clipboard=unnamedplus
 
 " Map \q to close the current buffer
 nmap <silent> <leader>q :bp\|bd #<CR>

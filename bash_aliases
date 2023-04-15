@@ -22,5 +22,5 @@ alias v="cd $HOME/dev/rust/vrproto/"
 alias c_w='cargo watch -s "cargo check --color always 2>&1 | head -63" -c -q'
 alias c_t='cargo watch -s "cargo test --color always 2>&1| head -63" -c -q'
 alias t="cd $HOME/dev/rust/threes"
-alias s="cd $HOME/dev/rust/space_survivors"
+alias s="cd $HOME/dev/space_survivors"
 alias r="(s;./wsl-launch.sh)"
